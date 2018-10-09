@@ -1,4 +1,4 @@
-package trumpet
+package http
 
 import (
 	"context"
