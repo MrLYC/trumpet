@@ -5,6 +5,8 @@ import (
 	"text/template"
 
 	"github.com/fatih/structs"
+	"github.com/oliveagle/jsonpath"
+	"github.com/sirupsen/logrus"
 )
 
 // Template :
@@ -31,12 +33,29 @@ func (t *Template) FHasAttr(object interface{}, name string) bool {
 	}
 }
 
+// FLookup :
+func (t *Template) FLookup(object interface{}, path string, defaults interface{}) interface{} {
+	switch object.(type) {
+	case map[string]interface{}:
+		result, err := jsonpath.JsonPathLookup(object, path)
+		if err != nil {
+			logrus.Warnf("look up path[%s] for %+v failed", path, object)
+			return defaults
+		}
+		return result
+	default:
+		s := structs.New(object)
+		return t.FLookup(s.Map(), path, defaults)
+	}
+}
+
 // NewTemplateWithParser :
 func NewTemplateWithParser(name string, parser func(*template.Template) (*template.Template, error)) (*Template, error) {
 	var err error
 	tmpl := &Template{}
 	t := template.New(name).Funcs(template.FuncMap{
 		"hasAttr": tmpl.FHasAttr,
+		"lookup":  tmpl.FLookup,
 	})
 
 	tmpl.Template, err = parser(t)
