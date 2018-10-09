@@ -21,7 +21,7 @@ func TestRender(t *testing.T) {
 
 func TestFHasAttr(t *testing.T) {
 	var output string
-	tmpl, err := http.NewTemplateFromString("test", `{{ if hasAttr . "OK" }}ok{{ end }}`)
+	tmpl, err := http.NewTemplateFromString("test", `{{ if hasattr . "OK" }}ok{{ end }}`)
 	assert.NoError(t, err)
 
 	dict := map[string]interface{}{

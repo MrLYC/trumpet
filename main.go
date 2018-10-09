@@ -6,8 +6,8 @@ import (
 	"os"
 
 	"github.com/google/subcommands"
-	"github.com/mrlyc/trumpet/trumpet"
 	"github.com/mrlyc/trumpet/config"
+	"github.com/mrlyc/trumpet/http"
 )
 
 type initialHandler func() bool
@@ -18,7 +18,7 @@ func main() {
 	subcommands.Register(subcommands.CommandsCommand(), "")
 	subcommands.Register(&config.VersionCommand{}, "")
 	subcommands.Register(&config.ConfInfoCommand{}, "")
-	subcommands.Register(&trumpet.Command{}, "")
+	subcommands.Register(&http.Command{}, "")
 
 	flag.StringVar(
 		&(config.Configuration.ConfigurationPath),
