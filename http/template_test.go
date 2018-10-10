@@ -8,10 +8,16 @@ import (
 	"github.com/stretchr/testify/assert"
 
 	"github.com/mrlyc/trumpet/http"
+	"github.com/spf13/afero"
 )
 
 func TestRender(t *testing.T) {
-	tmpl, err := http.NewTemplateFromString("test", `ok`)
+	fileName := "test"
+	setupFs(afero.NewMemMapFs())
+	defer tearDownFs()
+	writeFile(fileName, []byte(`ok`))
+
+	tmpl, err := http.NewTemplate(fileName)
 	assert.NoError(t, err)
 
 	output, err := tmpl.Render(nil)
@@ -20,8 +26,13 @@ func TestRender(t *testing.T) {
 }
 
 func TestFHasAttr(t *testing.T) {
+	fileName := "test"
+	setupFs(afero.NewMemMapFs())
+	defer tearDownFs()
+	writeFile(fileName, []byte(`{{ if hasattr . "OK" }}ok{{ end }}`))
+
 	var output string
-	tmpl, err := http.NewTemplateFromString("test", `{{ if hasattr . "OK" }}ok{{ end }}`)
+	tmpl, err := http.NewTemplate(fileName)
 	assert.NoError(t, err)
 
 	dict := map[string]interface{}{
@@ -44,6 +55,10 @@ func TestFHasAttr(t *testing.T) {
 }
 
 func TestFLookup(t *testing.T) {
+	fileName := "test"
+	setupFs(afero.NewMemMapFs())
+	defer tearDownFs()
+
 	var (
 		tmpl   *http.Template
 		output string
@@ -105,8 +120,8 @@ func TestFLookup(t *testing.T) {
 	}
 
 	for _, c := range cases {
-
-		tmpl, err = http.NewTemplateFromString("test", fmt.Sprintf(`{{ lookup . "%v" "!!!" }}`, c.input))
+		writeFile(fileName, []byte(fmt.Sprintf(`{{ lookup . "%v" "!!!" }}`, c.input)))
+		tmpl, err = http.NewTemplate(fileName)
 		assert.NoError(t, err)
 
 		output, err = tmpl.Render(data)

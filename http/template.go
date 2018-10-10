@@ -2,6 +2,7 @@ package http
 
 import (
 	"bytes"
+	"io/ioutil"
 	"text/template"
 
 	"github.com/fatih/structs"
@@ -54,7 +55,7 @@ func NewTemplateWithParser(name string, parser func(*template.Template) (*templa
 	var err error
 	tmpl := &Template{}
 	t := template.New(name).Funcs(template.FuncMap{
-		"hasAttr": tmpl.FHasAttr,
+		"hasattr": tmpl.FHasAttr,
 		"lookup":  tmpl.FLookup,
 	})
 
@@ -65,16 +66,17 @@ func NewTemplateWithParser(name string, parser func(*template.Template) (*templa
 	return tmpl, nil
 }
 
-// NewTemplateFromString :
-func NewTemplateFromString(name string, content string) (*Template, error) {
-	return NewTemplateWithParser(name, func(t *template.Template) (*template.Template, error) {
-		return t.Parse(content)
-	})
-}
-
 // NewTemplate :
 func NewTemplate(path string) (*Template, error) {
 	return NewTemplateWithParser(path, func(t *template.Template) (*template.Template, error) {
-		return t.ParseFiles(path)
+		file, err := FS.Open(path)
+		if err != nil {
+			return nil, err
+		}
+		content, err := ioutil.ReadAll(file)
+		if err != nil {
+			return nil, err
+		}
+		return t.Parse(string(content))
 	})
 }
