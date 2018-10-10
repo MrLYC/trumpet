@@ -220,6 +220,17 @@
   version = "v1.1.1"
 
 [[projects]]
+  digest = "1:2a7c79c506479dc73c0100982a40bacc89e06d96dc458eb41c9b6aa44d9e0b6d"
+  name = "github.com/spf13/afero"
+  packages = [
+    ".",
+    "mem",
+  ]
+  pruneopts = "NT"
+  revision = "d40851caa0d747393da1ffb28f7f9d8b4eeffebd"
+  version = "v1.1.2"
+
+[[projects]]
   digest = "1:4af061277c04a7660e082acc2020f4c66d2c21dfc62e0242ffa1d2120cdfb4ec"
   name = "github.com/stretchr/testify"
   packages = ["assert"]
@@ -269,6 +280,21 @@
   ]
   pruneopts = "NT"
   revision = "4497e2df6f9e69048a54498c7affbbec3294ad47"
+
+[[projects]]
+  digest = "1:8c74f97396ed63cc2ef04ebb5fc37bb032871b8fd890a25991ed40974b00cd2a"
+  name = "golang.org/x/text"
+  packages = [
+    "internal/gen",
+    "internal/triegen",
+    "internal/ucd",
+    "transform",
+    "unicode/cldr",
+    "unicode/norm",
+  ]
+  pruneopts = "NT"
+  revision = "f21a4dfb5e38f5895301dc265a8def02365cc3d0"
+  version = "v0.3.0"
 
 [[projects]]
   digest = "1:d595a6ccf3d2d734bfb0f9ab0bd689d81715cd2c72469ebca21680d8f51b3363"
@@ -333,6 +359,7 @@
     "github.com/pkg/errors",
     "github.com/sdboyer/constext",
     "github.com/sirupsen/logrus",
+    "github.com/spf13/afero",
     "github.com/stretchr/testify/assert",
     "golang.org/x/sync/errgroup",
     "gopkg.in/validator.v2",
